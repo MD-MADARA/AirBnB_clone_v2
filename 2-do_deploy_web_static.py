@@ -54,16 +54,16 @@ def do_deploy(archive_path):
 
     # clean up old release and remove it.
 
-    Res = run('rm -rf /data/web_static/current')
-    if Res.failed:
-        print('failed to clean up old release...')
-        return False
-    Res = run('ln -s /data/web_static/releases/{} /data/web_static/current'
-              .format(archive_no_ext))
-    if Res.failed:
-        print('failed to create link to new release...')
-        return False
+    # Res = run('rm -rf /data/web_static/current')
+    # if Res.failed:
+    #     print('failed to clean up old release...')
+    #     return False
+    # Res = run('ln -s /data/web_static/releases/{} /data/web_static/current'
+    #           .format(archive_no_ext))
+    # if Res.failed:
+    #     print('failed to create link to new release...')
+    #     return False
 
-    print('New version deployed!\n')
+    # print('New version deployed!\n')
 
-    return False
+    # return False
