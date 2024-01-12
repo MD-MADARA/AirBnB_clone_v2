@@ -2,11 +2,8 @@
 """Fabric script (based on the file 1-pack_web_static.py) that distributes
 an archive to your web servers,using the function do_deploy
 """
-from fabric.api import *
-from fabric.operations import put
-from datetime import datetime
-import os
-
+from fabric.api import env, put, run
+from  os import path
 
 env.hosts = ["34.229.66.3", "100.26.234.152"]
 
@@ -14,7 +11,7 @@ env.hosts = ["34.229.66.3", "100.26.234.152"]
 def do_deploy(archive_path):
     """Deploys a static archive to my web servers"""
 
-    if not os.path.isfile(archive_path):
+    if not path.isfile(archive_path):
         return False
     try:
         archive_tgz = archive_path.split('/')[1]
