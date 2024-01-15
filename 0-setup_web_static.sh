@@ -10,8 +10,7 @@ sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/  #will contain current (symbolic link to test/)
 
 #Server block
-ServerBlock="
-server {
+ServerBlock="server {
     listen 80;
     listen [::]:80 default_server;
 
@@ -29,18 +28,18 @@ server {
         alias /data/web_static/current/;
     }
 
-}
-"
+}"
 #Nginx config file path
 Config="/etc/nginx/sites-available/default"
 
 #Create a fake HTML file to test Nginx configuration
-Fake="
-<html>
-    <head></head>
-    <body>Holberton School</body>
-</html>
-"
+Fake="<html>
+    <head>
+    </head>
+    <body>
+        Holberton School
+    </body>
+</html>"
 echo "$Fake" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 #Create a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder.
