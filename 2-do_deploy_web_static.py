@@ -1,31 +1,29 @@
 #!/usr/bin/python3
 """Deploy archive!"""
-from fabric.api import env, put, run
-from os.path import exists
-do_pack = __import__('1-pack_web_static').do_pack
+from fabric.api import task, env, put, run
+import os
 env.hosts = ['34.229.66.3', '100.26.234.152']
 
 
+@task
 def do_deploy(archive_path):
-    """distributes an archive to the web servers"""
-    if exists(archive_path) is False:
-        return False
+    """ method doc """
     try:
-        file_name = archive_path.split("/")[-1]
-        no_ext = file_name.split(".")[0]
-        dest_path = f"/data/web_static/releases/{no_ext}"
-        if (
-            put(archive_path, '/tmp/').failed or
-            run(f'mkdir -p {dest_path}/').failed or
-            run(f'tar -xzf /tmp/{file_name} -C {dest_path}/').failed or
-            run(f'rm /tmp/{file_name}').failed or
-            run(f'mv {dest_path}/web_static/* {dest_path}/').failed or
-            run(f'rm -rf {dest_path}/web_static').failed or
-            run(f'rm -rf /data/web_static/current').failed or
-            run(f'ln -s {dest_path}/ /data/web_static/current').failed
-        ):
+        if not os.path.exists(archive_path):
             return False
+        fn_with_ext = os.path.basename(archive_path)
+        fn_no_ext = os.path.splitext(fn_with_ext)
+        dpath = "/data/web_static/releases/"
+        put(archive_path, "/tmp/")
+        run("rm -rf {}{}/".format(dpath, fn_no_ext))
+        run("mkdir -p {}{}/".format(dpath, fn_no_ext))
+        run("tar -xzf /tmp/{} -C {}{}/".format(fn_with_ext, dpath, fn_no_ext))
+        run("rm /tmp/{}".format(fn_with_ext))
+        run("mv {0}{1}/web_static/* {0}{1}/".format(dpath, fn_no_ext))
+        run("rm -rf {}{}/web_static".format(dpath, fn_no_ext))
+        run("rm -rf /data/web_static/current")
+        run("ln -s {}{}/ /data/web_static/current".format(dpath, fn_no_ext))
+        print("New version deployed!")
+        return True
     except Exception:
         return False
-    print("New version deployed!")
-    return True
