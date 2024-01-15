@@ -8,7 +8,7 @@ from datetime import datetime
 import os.path
 from fabric.api import put, run, env, local
 
-env.hosts = ['54.160.117.237', '100.25.31.84']
+env.hosts = ['34.229.66.3', '100.26.234.152']
 
 
 def do_pack():
@@ -25,9 +25,9 @@ def do_pack():
     if os.path.isdir("versions") is False:
         if local("mkdir -p versions").failed is True:
             return None
-    if local("tar -cvzf {} web_static".format(file_name)).failed is True:
+    if local("tar -cvzf {} web_static".format(file)).failed is True:
         return None
-    return file_name
+    return file
 
 
 def do_deploy(archive_path):
@@ -75,6 +75,6 @@ def deploy():
     Create and distribute an archive to a web server
     """
     file = do_pack()
-    if file_name is None:
+    if file is None:
         return False
-    return do_deploy(file_name)
+    return do_deploy(file)
